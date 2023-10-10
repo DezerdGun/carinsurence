@@ -1,0 +1,31 @@
+.insuranceBlock {
+  @apply max-w-6xl mx-auto py-10 px-5;
+
+  h2 {
+    @apply text-2xl font-bold mb-8 md:text-4xl md:mb-12;
+  }
+
+  &__block {
+    @apply flex flex-col gap-5 sm:flex-row;
+
+    &__item {
+      @apply p-4 border border-gray-200 bg-white rounded-2xl sm:w-1/2 sm:flex sm:flex-col sm:justify-between;
+
+      img {
+        @apply w-auto h-24 mb-5 md:h-32;
+      }
+
+      a {
+        @apply block text-center py-2 rounded-lg bg-blue-500 text-white;
+      }
+
+      &__title {
+        @apply font-bold mb-2;
+      }
+
+      &__description {
+        @apply mb-5;
+      }
+    }
+  }
+}
