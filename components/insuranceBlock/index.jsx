@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./insuranceBlock.module.scss";
+import { LINKS } from "@/consts";
 
 const InsuranceBlock = () => {
   const data = [
@@ -7,7 +8,7 @@ const InsuranceBlock = () => {
       img: "/osago.svg",
       title: "ОСАГО",
       description: "Возместим ущерб третьим лицам, если вы стали виновником ДТП",
-      link: "#",
+      link: LINKS.OSAGO,
     },
     {
       img: "/kasko.svg",
