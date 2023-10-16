@@ -1,10 +1,11 @@
-import { Banner, OsagoAdvantages } from "@/components";
+import { Banner, OsagoAdvantages, Calculator } from "@/components";
 
 const Osago = () => {
   return (
     <main>
       <Banner />
       <OsagoAdvantages />
+      <Calculator />
     </main>
   );
 };
