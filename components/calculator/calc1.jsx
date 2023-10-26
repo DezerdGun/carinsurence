@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useCalcSlice from "@/store/useCalcSlice";
-import { CalcTabs, H4 } from "..";
+import { CalcTabs, H3 } from "..";
 import {
   Autocomplete,
   Button,
@@ -67,21 +67,29 @@ const Calc1 = () => {
 
 export default Calc1;
 
-const CompleteType = () => {
+export const CompleteType = () => {
   const numFormat = useCalcSlice((store) => store.numFormat);
   const setAnyKey = useCalcSlice((store) => store.setAnyKey);
+  const step = useCalcSlice((store) => store.step);
+  const setStep = useCalcSlice((store) => store.setStep);
+
   const [selectType, setSelectType] = useState({
     title: "Тип",
     data: transportType,
   });
 
   const handleChangeSelect = (event) => {
-    setSelectType({ title: "Категория", data: event[0].children });
+    if (event[0]?.children) setSelectType({ title: "Категория", data: event[0].children });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setStep(2);
   };
 
   return (
-    <form className="pt-5">
-      <H4 className="mb-1">Автомобиль</H4>
+    <form className="pt-5" onSubmit={handleSubmit}>
+      <H3 className="mb-1">Автомобиль</H3>
       <p className="text-sm text-gray-500">
         Введите регистрационный номер и нажмите "Найти" - данные по авто заполнятся автоматически
       </p>
@@ -91,16 +99,10 @@ const CompleteType = () => {
           <FormControl fullWidth>
             <TextField
               label="Регистрационный номер"
-              size="small"
               InputProps={{
                 className: "text-base px-2",
                 endAdornment: (
-                  <Button
-                    variant="contained"
-                    size="small"
-                    color="primary"
-                    className="px-5 py-1 normal-case bg-blue-600"
-                  >
+                  <Button variant="contained" color="primary" className="px-5 py-1 normal-case bg-blue-600">
                     Найти
                   </Button>
                 ),
@@ -109,11 +111,10 @@ const CompleteType = () => {
             />
           </FormControl>
           <FormControl fullWidth>
-            <InputLabel size="small">Формат номера</InputLabel>
+            <InputLabel>Формат номера</InputLabel>
             <Select
               value={numFormat}
               label="Формат номера"
-              size="small"
               onChange={(event) => setAnyKey("numFormat", event.target.value)}
               required
             >
@@ -133,25 +134,28 @@ const CompleteType = () => {
       <Autocomplete
         fullWidth
         multiple={true}
-        id="cashierInfoShopID"
-        size="small"
         // value={null}
         options={selectType.data}
         renderInput={(params) => (
-          <TextField {...params} label="Характеристики ТС" placeholder={selectType.title} required />
+          <TextField
+            {...params}
+            label="Характеристики ТС"
+            placeholder={selectType.title}
+            required={selectType.data?.children?.length}
+          />
         )}
         onChange={(_, checkedItem) => handleChangeSelect(checkedItem)}
       />
-
-      <Button
-        type="submit"
-        variant="contained"
-        color="success"
-        size="small"
-        className="block px-4 py-2 mt-8 ml-auto normal-case bg-green-700"
-      >
-        Продолжить
-      </Button>
+      {step === 1 && (
+        <Button
+          type="submit"
+          variant="contained"
+          color="success"
+          className="block px-4 py-2 mt-8 ml-auto normal-case bg-green-700"
+        >
+          Продолжить
+        </Button>
+      )}
     </form>
   );
 };

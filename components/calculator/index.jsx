@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Container, H2, H3 } from "..";
 import Calc1 from "./calc1";
+import Calc2 from "./calc2";
 import useCalcSlice from "@/store/useCalcSlice";
 
 const steps = ["Расчет", "Оформление", "Оплата"];
@@ -13,6 +14,8 @@ const Calculator = () => {
     switch (step) {
       case 1:
         return <Calc1 />;
+      case 2:
+        return <Calc2 />;
     }
   };
 
