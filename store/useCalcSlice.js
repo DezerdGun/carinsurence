@@ -15,6 +15,9 @@ const useCalcSlice = create((set) => ({
 
   typeVin: "vin",
   setTypeVin: (typeVin) => set({ typeVin }),
+
+  typePol: "male",
+  setTypePol: (typePol) => set({ typePol }),
 }));
 
 export default useCalcSlice;

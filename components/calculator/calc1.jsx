@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useCalcSlice from "@/store/useCalcSlice";
-import { CalcTabs, H3 } from "..";
+import { CalcTabs, H3, H4 } from "..";
 import {
   Autocomplete,
   Button,
@@ -55,23 +55,50 @@ const transportType = [
 const Calc1 = () => {
   const type = useCalcSlice((store) => store.type);
   const setType = useCalcSlice((store) => store.setType);
+  const setStep = useCalcSlice((store) => store.setStep);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setStep(2);
+  };
 
   return (
     <div className="py-5">
       <CalcTabs options={tabs} selected={type} handleChange={setType} />
 
-      {type === "complete" ? <CompleteType /> : <ContinueType />}
+      <div className="pt-4">
+        {type === "complete" ? (
+          <CompleteForm
+            title="Автомобиль"
+            description='Введите регистрационный номер и нажмите "Найти" - данные по авто заполнятся автоматически'
+            handleSubmit={handleSubmit}
+          >
+            <CompleteType />
+          </CompleteForm>
+        ) : (
+          <ContinueType />
+        )}
+      </div>
     </div>
   );
 };
 
 export default Calc1;
 
+export const CompleteForm = ({ title, description, handleSubmit, children }) => {
+  return (
+    <form onSubmit={handleSubmit}>
+      <H3 className="mb-1">{title}</H3>
+      {description && <p className="text-sm text-gray-500">{description}</p>}
+      {children}
+    </form>
+  );
+};
+
 export const CompleteType = () => {
   const numFormat = useCalcSlice((store) => store.numFormat);
   const setAnyKey = useCalcSlice((store) => store.setAnyKey);
   const step = useCalcSlice((store) => store.step);
-  const setStep = useCalcSlice((store) => store.setStep);
 
   const [selectType, setSelectType] = useState({
     title: "Тип",
@@ -82,18 +109,8 @@ export const CompleteType = () => {
     if (event[0]?.children) setSelectType({ title: "Категория", data: event[0].children });
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setStep(2);
-  };
-
   return (
-    <form className="pt-5" onSubmit={handleSubmit}>
-      <H3 className="mb-1">Автомобиль</H3>
-      <p className="text-sm text-gray-500">
-        Введите регистрационный номер и нажмите "Найти" - данные по авто заполнятся автоматически
-      </p>
-
+    <>
       <div className="my-5">
         <Stack direction="row" gap="20px">
           <FormControl fullWidth>
@@ -134,7 +151,6 @@ export const CompleteType = () => {
       <Autocomplete
         fullWidth
         multiple={true}
-        // value={null}
         options={selectType.data}
         renderInput={(params) => (
           <TextField
@@ -156,13 +172,13 @@ export const CompleteType = () => {
           Продолжить
         </Button>
       )}
-    </form>
+    </>
   );
 };
 
 const ContinueType = () => {
   return (
-    <form className="pt-5">
+    <form>
       <H4 className="mb-1">Предыдущий полис</H4>
       <p className="text-sm text-gray-500">
         Введите номер полиса в формате ХХХ 1234567890 или CL1234567890 Если не можете найти номер полиса, войдите в
@@ -170,10 +186,10 @@ const ContinueType = () => {
       </p>
       <div className="flex items-center gap-5 my-4">
         <FormControl fullWidth>
-          <TextField label="Номер полиса" size="small" required />
+          <TextField label="Номер полиса" required />
         </FormControl>
         <FormControl fullWidth>
-          <TextField label="Фамилия" size="small" required />
+          <TextField label="Фамилия" required />
         </FormControl>
       </div>
 
@@ -181,7 +197,6 @@ const ContinueType = () => {
         type="submit"
         variant="contained"
         color="primary"
-        size="small"
         className="block px-4 py-2 ml-auto normal-case bg-blue-600"
       >
         Продлить

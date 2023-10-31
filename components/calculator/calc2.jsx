@@ -1,7 +1,7 @@
 import useCalcSlice from "@/store/useCalcSlice";
-import { CompleteType } from "./calc1";
+import { CompleteForm, CompleteType } from "./calc1";
 import { CalcTabs } from "..";
-import { Autocomplete, Button, Checkbox, TextField } from "@mui/material";
+import { Autocomplete, Button, Checkbox, Switch, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -49,6 +49,11 @@ const target = [
   },
 ];
 
+const tabsPol = [
+  { title: "Мужчина", value: "male" },
+  { title: "Женщина", value: "female" },
+];
+
 const Calc2 = () => {
   const setStep = useCalcSlice((store) => store.setStep);
 
@@ -58,10 +63,25 @@ const Calc2 = () => {
   const typeVin = useCalcSlice((store) => store.typeVin);
   const setTypeVin = useCalcSlice((store) => store.setTypeVin);
 
+  const typePol = useCalcSlice((store) => store.typePol);
+  const setTypePol = useCalcSlice((store) => store.setTypePol);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setStep(2);
+  };
+
   return (
     <>
       <div className="py-5 border-b border-gray-400">
-        <CompleteType />
+        <CompleteForm
+          title="Автомобиль"
+          description='Введите регистрационный номер и нажмите "Найти" - данные по авто заполнятся автоматически'
+          handleSubmit={handleSubmit}
+        >
+          <CompleteType />
+        </CompleteForm>
+
         <div className="pt-4">
           <CalcTabs options={tabsTriple} selected={typeTriple} handleChange={setTypeTriple} />
         </div>
@@ -91,7 +111,96 @@ const Calc2 = () => {
           </div>
         </div>
       </div>
-      <div className="flex items-baseline justify-between">
+
+      <div className="py-5 border-b border-gray-400">
+        <CompleteForm title="Страхователь" description="тот, кто оформляет полис" handleSubmit={handleSubmit}>
+          <div className="flex items-center gap-5 pt-4">
+            <TextField
+              sx={{ width: "50%" }}
+              type="email"
+              label="Электронная почта"
+              placeholder="ivan@test.com"
+              required
+            />
+            <TextField
+              sx={{ width: "50%" }}
+              type="tel"
+              label="Номер телефона"
+              placeholder="+7 (951) 546-09-29"
+              required
+            />
+          </div>
+        </CompleteForm>
+
+        <div className="pt-4">
+          <TextField fullWidth label="ФИО" placeholder="Иванов Петр Ильич" required />
+        </div>
+
+        <div className="flex items-center gap-5 pt-4">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker label="Дата рождения" sx={{ width: "50%" }} required />
+          </LocalizationProvider>
+          <CalcTabs options={tabsPol} selected={typePol} handleChange={setTypePol} />
+        </div>
+
+        <div className="pt-4">
+          <TextField
+            fullWidth
+            label="Адрес регистрации"
+            placeholder="г Москва, поселение Воронвское, кв-л 180, д 25Б"
+            required
+          />
+        </div>
+
+        <div className="flex items-center gap-2 pt-4">
+          <Switch defaultChecked />
+          Документ иностранного государства
+        </div>
+
+        <div className="flex items-center gap-5 pt-4">
+          <Autocomplete
+            fullWidth
+            options={target}
+            renderInput={(params) => <TextField {...params} label="Цель использования" required />}
+            // onChange={(_, checkedItem) => handleChangeSelect(checkedItem)}
+            sx={{ width: "50%" }}
+          />
+          <TextField sx={{ width: "50%" }} label={typeTriple === "epts" ? "Номер" : "Серия и номер"} required />
+        </div>
+
+        <div className="flex items-start pt-4">
+          <Checkbox />
+          <div>
+            Указать СНИЛС
+            <br />
+            <span className="text-sm text-gray-500">Не обязательно для заполнения</span>
+          </div>
+        </div>
+
+        <div className="flex items-center">
+          <Checkbox defaultChecked />
+          Страхователь является собственником авто
+        </div>
+        <div className="flex items-center">
+          <Checkbox defaultChecked />
+          Страхователь является водителем
+        </div>
+      </div>
+
+      <div className="py-5 border-b border-gray-400">
+        <CompleteForm title="Водители" handleSubmit={handleSubmit}>
+          <div className="flex items-start gap-2 pt-4">
+            <Switch defaultChecked />
+            <div>
+              <span className="font-medium">Мультидрайв (ОСАГО без ограничения по количеству водителей)</span>
+              <br />
+              <span className="text-sm text-gray-500">Стоимость полиса увеличится</span>
+            </div>
+          </div>
+        </CompleteForm>
+      </div>
+
+      <div className="flex items-baseline justify-between pt-5">
         <a
           className="flex items-baseline text-blue-700 cursor-pointer hover:underline hover:underline-offset-4"
           onClick={() => setStep(1)}
