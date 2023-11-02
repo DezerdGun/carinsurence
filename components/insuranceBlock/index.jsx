@@ -14,7 +14,7 @@ const InsuranceBlock = () => {
       img: "/kasko.svg",
       title: "Каско",
       description: "Компенсируем ремонт вашего авто, даже если вы стали виновником ДТПП",
-      link: "#",
+      link: LINKS.KASKO,
     },
   ];
 

@@ -1,12 +1,11 @@
-import { useState } from "react";
 import { Container, H2, H3 } from "..";
 import Calc1 from "./calc1";
 import Calc2 from "./calc2";
 import useCalcSlice from "@/store/useCalcSlice";
 
-const steps = ["Расчет", "Оформление", "Оплата"];
+const steps = ["Предрасчет", "Выбор опций", "Оформление", "Осмотр"];
 
-const Calculator = () => {
+const CalculatorKasko = () => {
   const step = useCalcSlice((store) => store.step);
   const setStep = useCalcSlice((store) => store.setStep);
 
@@ -21,12 +20,10 @@ const Calculator = () => {
 
   return (
     <Container>
-      <H2 className="mb-5 text-center">Оформить ОСАГО за три шага</H2>
-
       <div className="flex gap-5 p-8 bg-white rounded-xl">
         <div className="w-3/5">
           <div className="pb-8 border-b border-gray-300">
-            <H3 className="mb-4">Выбор авто</H3>
+            <H3 className="mb-4">Расчет Каско</H3>
 
             <div className="flex items-center gap-5">
               {steps.map((item, index) => (
@@ -55,4 +52,4 @@ const Calculator = () => {
   );
 };
 
-export default Calculator;
+export default CalculatorKasko;
