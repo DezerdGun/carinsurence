@@ -40,15 +40,30 @@ const numFormats = [
 const categories = ["A", "B", "C", "D", "E"];
 
 const transportType = [
-  { label: "Мотоциклы", value: "moto", children: [{ label: "A", value: "A" }] },
+  // { label: "Мотоциклы", value: "moto", children: [{ label: "A", value: "A" }] },
   {
     label: "Легковые",
     value: "auto",
     children: [
-      { label: "B", value: "B" },
-      { label: "C", value: "C" },
-      { label: "D", value: "D" },
+      {
+        label: "Tracker 2",
+        value: "tracker-2",
+        children: [
+          {
+            label: "2022",
+            value: "2022",
+            children: [
+              { label: "1200 КУБ. СМ.", value: "1200", children: [{ label: "СЕРЕБРИСТЫЙ", value: "silver" }] },
+            ],
+          },
+        ],
+      },
     ],
+    // children: [
+    //   { label: "B", value: "B" },
+    //   { label: "C", value: "C" },
+    //   { label: "D", value: "D" },
+    // ],
   },
 ];
 
@@ -76,7 +91,14 @@ const Calc1 = () => {
             <CompleteType />
           </CompleteForm>
         ) : (
-          <ContinueType />
+          <CompleteForm
+            title="Предыдущий полис"
+            description="Введите номер полиса в формате ХХХ 1234567890 или CL1234567890 Если не можете найти номер полиса, войдите в
+            Личный кабинет и продлите полис"
+            handleSubmit={handleSubmit}
+          >
+            <ContinueType />
+          </CompleteForm>
         )}
       </div>
     </div>
@@ -96,8 +118,6 @@ export const CompleteForm = ({ title, description, handleSubmit, children }) => 
 };
 
 export const CompleteType = () => {
-  const numFormat = useCalcSlice((store) => store.numFormat);
-  const setAnyKey = useCalcSlice((store) => store.setAnyKey);
   const step = useCalcSlice((store) => store.step);
 
   const [selectType, setSelectType] = useState({
@@ -106,42 +126,46 @@ export const CompleteType = () => {
   });
 
   const handleChangeSelect = (event) => {
-    if (event[0]?.children) setSelectType({ title: "Категория", data: event[0].children });
+    switch (event.length) {
+      case 0:
+        return setSelectType({
+          title: "Тип",
+          data: transportType,
+        });
+      case 1:
+        return setSelectType({ title: "Модель", data: event[0].children });
+      case 2:
+        return setSelectType({ title: "Год", data: event[1].children });
+      case 3:
+        return setSelectType({ title: "Объем", data: event[2].children });
+      case 4:
+        return setSelectType({ title: "Цвет", data: event[3].children });
+      case 5:
+        return setSelectType({ title: "", data: [] });
+    }
   };
 
   return (
     <>
       <div className="my-5">
         <Stack direction="row" gap="20px">
-          <FormControl fullWidth>
-            <TextField
-              label="Регистрационный номер"
-              InputProps={{
-                className: "text-base px-2",
-                endAdornment: (
-                  <Button variant="contained" color="primary" className="px-5 py-1 normal-case bg-blue-600">
-                    Найти
-                  </Button>
-                ),
-              }}
-              required
-            />
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel>Формат номера</InputLabel>
-            <Select
-              value={numFormat}
-              label="Формат номера"
-              onChange={(event) => setAnyKey("numFormat", event.target.value)}
-              required
-            >
-              {numFormats.map((item) => (
-                <MenuItem key={item.title} value={item.value}>
-                  {item.title}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <TextField
+            label="Регистрационный номер"
+            InputProps={{
+              className: "text-base px-2",
+              endAdornment: (
+                <Button variant="contained" color="primary" className="px-5 py-1 normal-case bg-blue-600">
+                  Найти
+                </Button>
+              ),
+            }}
+            sx={{ width: "50%" }}
+            required
+          />
+          <Stack direction="row" gap="10px" sx={{ width: "50%" }}>
+            <TextField label="Серия" sx={{ width: "120px" }} required />
+            <TextField label="Номер" required />
+          </Stack>
         </Stack>
         <p className="mt-2 text-xs text-gray-500">
           Если авто не стоит на учете, выберите формат номера "У меня нет номера"
@@ -151,6 +175,8 @@ export const CompleteType = () => {
       <Autocomplete
         fullWidth
         multiple={true}
+        disableCloseOnSelect
+        clearText="Очистить"
         options={selectType.data}
         renderInput={(params) => (
           <TextField
@@ -178,12 +204,7 @@ export const CompleteType = () => {
 
 const ContinueType = () => {
   return (
-    <form>
-      <H4 className="mb-1">Предыдущий полис</H4>
-      <p className="text-sm text-gray-500">
-        Введите номер полиса в формате ХХХ 1234567890 или CL1234567890 Если не можете найти номер полиса, войдите в
-        Личный кабинет и продлите полис
-      </p>
+    <>
       <div className="flex items-center gap-5 my-4">
         <FormControl fullWidth>
           <TextField label="Номер полиса" required />
@@ -201,6 +222,6 @@ const ContinueType = () => {
       >
         Продлить
       </Button>
-    </form>
+    </>
   );
 };

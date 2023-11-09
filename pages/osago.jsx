@@ -1,4 +1,5 @@
-import { Banner, CalculatorOsago, AdvantagesIngos } from "@/components";
+import { Banner, AdvantagesIngos } from "@/components";
+import { LINKS } from "@/consts";
 
 const Osago = () => {
   const data = [
@@ -26,11 +27,11 @@ const Osago = () => {
       <Banner
         title="Полис ОСАГО онлайн"
         description=" Узнайте стоимость за несколько минут, оформите полис через интернет без осмотра авто. Получите кешбэк при оплате картой Ингосстрах Бонус"
+        link={LINKS.OSAGO_CALC}
         linkTitle="Рассчитать ОСАГО"
         img="/auto-osago__hero-banner-new-3.svg"
       />
       <AdvantagesIngos title="Преимущества полиса ОСАГО в «Ингосстрахе»" data={data} />
-      <CalculatorOsago />
     </main>
   );
 };

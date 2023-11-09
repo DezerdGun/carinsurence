@@ -1,7 +1,7 @@
 import useCalcSlice from "@/store/useCalcSlice";
 import { CompleteForm, CompleteType } from "./calc1";
 import { CalcTabs } from "..";
-import { Autocomplete, Button, Checkbox, Switch, TextField } from "@mui/material";
+import { Autocomplete, Button, Checkbox, Stack, Switch, TextField } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -54,6 +54,16 @@ const tabsPol = [
   { title: "Женщина", value: "female" },
 ];
 
+const tabsDrivCount = [
+  { title: "Без ограничений", value: "infinite" },
+  { title: "До 5 лиц", value: "up-to-5" },
+];
+
+const tabsPeriod = [
+  { title: "1 год", value: "12-months" },
+  { title: "6 месяцев", value: "6-months" },
+];
+
 const Calc2 = () => {
   const setStep = useCalcSlice((store) => store.setStep);
 
@@ -65,6 +75,12 @@ const Calc2 = () => {
 
   const typePol = useCalcSlice((store) => store.typePol);
   const setTypePol = useCalcSlice((store) => store.setTypePol);
+
+  const typeDrivCount = useCalcSlice((store) => store.typeDrivCount);
+  const setTypeDrivCount = useCalcSlice((store) => store.setTypeDrivCount);
+
+  const typePeriod = useCalcSlice((store) => store.typePeriod);
+  const setTypePeriod = useCalcSlice((store) => store.setTypePeriod);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -82,21 +98,18 @@ const Calc2 = () => {
           <CompleteType />
         </CompleteForm>
 
-        <div className="pt-4">
-          <CalcTabs options={tabsTriple} selected={typeTriple} handleChange={setTypeTriple} />
-        </div>
         <div className="flex items-center gap-5 pt-4">
-          <TextField sx={{ width: "50%" }} label={typeTriple === "epts" ? "Номер" : "Серия и номер"} required />
+          {/* <TextField sx={{ width: "50%" }} label={typeTriple === "epts" ? "Номер" : "Серия и номер"} required /> */}
+          <TextField sx={{ width: "49%" }} label="VIN" required />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker label="Дата выдачи" sx={{ width: "50%" }} required />
           </LocalizationProvider>
         </div>
-        <div className="pt-4">
-          <CalcTabs options={tabsVin} selected={typeVin} handleChange={setTypeVin} />
-        </div>
-        <div className="pt-4">
-          <TextField sx={{ width: "49%" }} label={tabsVin.find((item) => item.value === typeVin).title} required />
-        </div>
+
+        {/* <div className="pt-4">
+          <TextField sx={{ width: "49%" }} label='VIN' required />
+        </div> */}
+
         <div className="flex items-center gap-5 pt-4">
           <Autocomplete
             fullWidth
@@ -133,26 +146,23 @@ const Calc2 = () => {
         </CompleteForm>
 
         <div className="pt-4">
-          <TextField fullWidth label="ФИО" placeholder="Иванов Петр Ильич" required />
+          <TextField fullWidth label="ПИНФЛ" required />
         </div>
 
         <div className="flex items-center gap-5 pt-4">
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker label="Дата рождения" sx={{ width: "50%" }} required />
-          </LocalizationProvider>
+          <Stack direction="row" gap="10px" sx={{ width: "50%" }}>
+            <TextField label="Серия" sx={{ width: "120px" }} placeholder="XX" required />
+            <TextField label="Номер" placeholder="1234567" required />
+          </Stack>
+
           <CalcTabs options={tabsPol} selected={typePol} handleChange={setTypePol} />
         </div>
 
         <div className="pt-4">
-          <TextField
-            fullWidth
-            label="Адрес регистрации"
-            placeholder="г Москва, поселение Воронвское, кв-л 180, д 25Б"
-            required
-          />
+          <TextField fullWidth label="ИНН" required />
         </div>
 
-        <div className="flex items-center gap-2 pt-4">
+        {/* <div className="flex items-center gap-2 pt-4">
           <Switch defaultChecked />
           Документ иностранного государства
         </div>
@@ -175,9 +185,9 @@ const Calc2 = () => {
             <br />
             <span className="text-sm text-gray-500">Не обязательно для заполнения</span>
           </div>
-        </div>
+        </div> */}
 
-        <div className="flex items-center">
+        <div className="flex items-center pt-2">
           <Checkbox defaultChecked />
           Страхователь является собственником авто
         </div>
@@ -189,14 +199,28 @@ const Calc2 = () => {
 
       <div className="py-5 border-b border-gray-400">
         <CompleteForm title="Водители" handleSubmit={handleSubmit}>
-          <div className="flex items-start gap-2 pt-4">
+          <div className="pt-4">
+            <div className="mb-2">Количество водителей</div>
+            <CalcTabs options={tabsDrivCount} selected={typeDrivCount} handleChange={setTypeDrivCount} />
+          </div>
+
+          <div className="pt-4">
+            <div className="mb-2">Период страхования</div>
+            <CalcTabs options={tabsPeriod} selected={typePeriod} handleChange={setTypePeriod} />
+          </div>
+
+          <div className="pt-4">
+            <TextField fullWidth label="Стоимость полиса" value="168 000,00 сум" required />
+          </div>
+
+          {/* <div className="flex items-start gap-2 pt-4">
             <Switch defaultChecked />
             <div>
               <span className="font-medium">Мультидрайв (ОСАГО без ограничения по количеству водителей)</span>
               <br />
               <span className="text-sm text-gray-500">Стоимость полиса увеличится</span>
             </div>
-          </div>
+          </div> */}
         </CompleteForm>
       </div>
 

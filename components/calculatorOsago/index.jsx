@@ -5,7 +5,7 @@ import useCalcSlice from "@/store/useCalcSlice";
 
 const steps = ["Расчет", "Оформление", "Оплата"];
 
-const CalculatorOsago = () => {
+const CalculatorOsago = ({ title }) => {
   const step = useCalcSlice((store) => store.step);
   const setStep = useCalcSlice((store) => store.setStep);
 
@@ -20,7 +20,7 @@ const CalculatorOsago = () => {
 
   return (
     <Container>
-      <H2 className="mb-5 text-center">Оформить ОСАГО за три шага</H2>
+      <H2 className="mb-5 text-center">Оформить {title} за три шага</H2>
 
       <div className="flex gap-5 p-8 bg-white rounded-xl">
         <div className="w-3/5">

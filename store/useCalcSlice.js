@@ -18,6 +18,12 @@ const useCalcSlice = create((set) => ({
 
   typePol: "male",
   setTypePol: (typePol) => set({ typePol }),
+
+  typeDrivCount: "infinite",
+  setTypeDrivCount: (typeDrivCount) => set({ typeDrivCount }),
+
+  typePeriod: "12-months",
+  setTypePeriod: (typePeriod) => set({ typePeriod }),
 }));
 
 export default useCalcSlice;
