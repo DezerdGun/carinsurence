@@ -1,17 +1,9 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useCalcSlice from "@/store/useCalcSlice";
 import { CalcTabs, H3, H4 } from "..";
-import {
-  Autocomplete,
-  Button,
-  FormControl,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-} from "@mui/material";
+import InputMask from "react-input-mask";
+
+import { Autocomplete, Button, FormControl, Stack, TextField } from "@mui/material";
 
 const tabs = [
   { title: "Оформить", value: "complete" },
@@ -119,6 +111,7 @@ export const CompleteForm = ({ title, description, handleSubmit, children }) => 
 
 export const CompleteType = () => {
   const step = useCalcSlice((store) => store.step);
+  // const regNumber = useRef();
 
   const [selectType, setSelectType] = useState({
     title: "Тип",
@@ -149,22 +142,69 @@ export const CompleteType = () => {
     <>
       <div className="my-5">
         <Stack direction="row" gap="20px">
-          <TextField
-            label="Регистрационный номер"
-            InputProps={{
-              className: "text-base px-2",
-              endAdornment: (
-                <Button variant="contained" color="primary" className="px-5 py-1 normal-case bg-blue-600">
-                  Найти
-                </Button>
-              ),
-            }}
-            sx={{ width: "50%" }}
+          <InputMask
+            // ref={regNumber}
+            name="reg-number"
+            mask="99 a 999 aa"
+            maskChar=""
+            placeholder="00 X 000 XX"
             required
-          />
+            minLength={12}
+          >
+            {(inputProps) => (
+              <TextField
+                {...inputProps}
+                label="Регистрационный номер"
+                inputProps={{
+                  style: { textTransform: "uppercase" },
+                }}
+                InputProps={{
+                  className: "text-base px-2",
+                  endAdornment: (
+                    <Button variant="contained" color="primary" className="px-5 py-1 normal-case bg-blue-600">
+                      Найти
+                    </Button>
+                  ),
+                }}
+                sx={{ width: "50%" }}
+                required
+              />
+            )}
+          </InputMask>
+
           <Stack direction="row" gap="10px" sx={{ width: "50%" }}>
-            <TextField label="Серия" sx={{ width: "120px" }} required />
-            <TextField label="Номер" required />
+            <InputMask
+              // ref={regNumber}
+              name="serial"
+              mask="aaa"
+              maskChar="_"
+              placeholder="XXX"
+              required
+              minLength={3}
+            >
+              {(inputProps) => (
+                <TextField
+                  {...inputProps}
+                  inputProps={{
+                    style: { textTransform: "uppercase" },
+                  }}
+                  label="Серия"
+                  sx={{ width: "120px" }}
+                  required
+                />
+              )}
+            </InputMask>
+            <InputMask
+              // ref={regNumber}
+              name="number"
+              mask="9999999"
+              maskChar="_"
+              placeholder="1234567"
+              required
+              minLength={7}
+            >
+              {(inputProps) => <TextField {...inputProps} label="Номер" required />}
+            </InputMask>
           </Stack>
         </Stack>
         <p className="mt-2 text-xs text-gray-500">

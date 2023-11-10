@@ -5,6 +5,7 @@ import { Autocomplete, Button, Checkbox, Stack, Switch, TextField } from "@mui/m
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import InputMask from "react-input-mask";
 
 const tabsTriple = [
   { title: "СТС", value: "sts" },
@@ -135,31 +136,95 @@ const Calc2 = () => {
               placeholder="ivan@test.com"
               required
             />
-            <TextField
-              sx={{ width: "50%" }}
-              type="tel"
-              label="Номер телефона"
-              placeholder="+7 (951) 546-09-29"
+            <InputMask
+              // ref={regNumber}
+              name="phone"
+              mask="+\9\98 (99) 999-99-99"
+              maskChar="_"
+              placeholder="1234567"
               required
-            />
+              minLength={7}
+            >
+              {(inputProps) => (
+                <TextField
+                  {...inputProps}
+                  sx={{ width: "50%" }}
+                  type="tel"
+                  label="Номер телефона"
+                  placeholder="+7 (951) 546-09-29"
+                  required
+                />
+              )}
+            </InputMask>
           </div>
         </CompleteForm>
 
         <div className="pt-4">
-          <TextField fullWidth label="ПИНФЛ" required />
+          <InputMask
+            // ref={regNumber}
+            name="PINFL"
+            mask="99999999999999"
+            maskChar="_"
+            placeholder="12345678900000"
+            required
+            minLength={14}
+          >
+            {(inputProps) => <TextField {...inputProps} fullWidth label="ПИНФЛ" required />}
+          </InputMask>
         </div>
 
         <div className="flex items-center gap-5 pt-4">
           <Stack direction="row" gap="10px" sx={{ width: "50%" }}>
-            <TextField label="Серия" sx={{ width: "120px" }} placeholder="XX" required />
-            <TextField label="Номер" placeholder="1234567" required />
+            <InputMask
+              // ref={regNumber}
+              name="passport-serial"
+              mask="aa"
+              maskChar="_"
+              placeholder="XX"
+              required
+              minLength={2}
+            >
+              {(inputProps) => (
+                <TextField
+                  {...inputProps}
+                  inputProps={{
+                    style: { textTransform: "uppercase" },
+                  }}
+                  label="Серия"
+                  sx={{ width: "120px" }}
+                  placeholder="XX"
+                  required
+                />
+              )}
+            </InputMask>
+            <InputMask
+              // ref={regNumber}
+              name="passport-number"
+              mask="9999999"
+              maskChar="_"
+              placeholder="1234567"
+              required
+              minLength={7}
+            >
+              {(inputProps) => <TextField {...inputProps} label="Номер" placeholder="1234567" required />}
+            </InputMask>
           </Stack>
 
           <CalcTabs options={tabsPol} selected={typePol} handleChange={setTypePol} />
         </div>
 
         <div className="pt-4">
-          <TextField fullWidth label="ИНН" required />
+          <InputMask
+            // ref={regNumber}
+            name="INN"
+            mask="999999999"
+            maskChar="_"
+            placeholder="123456789"
+            required
+            minLength={7}
+          >
+            {(inputProps) => <TextField {...inputProps} fullWidth label="ИНН" required />}
+          </InputMask>
         </div>
 
         {/* <div className="flex items-center gap-2 pt-4">

@@ -1,7 +1,7 @@
 const { create } = require("zustand");
 
 const useCalcSlice = create((set) => ({
-  step: 1,
+  step: 2,
   setStep: (step) => set({ step }),
 
   type: "complete",
