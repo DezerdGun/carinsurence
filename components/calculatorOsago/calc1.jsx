@@ -161,7 +161,7 @@ export const CompleteType = () => {
                 InputProps={{
                   className: "text-base px-2",
                   endAdornment: (
-                    <Button variant="contained" color="primary" className="px-5 py-1 normal-case bg-blue-600">
+                    <Button variant="contained" color="primary" className="px-5 py-1 normal-case bg-brand">
                       Найти
                     </Button>
                   ),
@@ -233,7 +233,7 @@ export const CompleteType = () => {
           type="submit"
           variant="contained"
           color="success"
-          className="block px-4 py-2 mt-8 ml-auto normal-case bg-green-700"
+          className="block px-5 py-2 mt-8 ml-auto normal-case bg-accent"
         >
           Продолжить
         </Button>
@@ -258,7 +258,7 @@ const ContinueType = () => {
         type="submit"
         variant="contained"
         color="primary"
-        className="block px-4 py-2 ml-auto normal-case bg-blue-600"
+        className="block px-5 py-2 ml-auto normal-case bg-brand"
       >
         Продлить
       </Button>

@@ -1,13 +1,13 @@
 const CalcTabs = ({ options, selected, handleChange }) => {
   return (
-    <div className="flex items-center gap-1 p-2 border border-gray-400 rounded-lg w-fit">
+    <div className="inline-flex items-center gap-1 p-1 border rounded-xl bg-surface border-line">
       {options.map((option) => (
         <div
           key={option.value}
-          className={`px-3 py-2 border rounded-md text-sm transition-all ${
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
             selected === option.value
-              ? "border-blue-600 text-blue-500 cursor-default"
-              : "cursor-pointer hover:bg-blue-200 border-transparent text-gray-500"
+              ? "bg-white text-brand shadow-soft cursor-default"
+              : "cursor-pointer text-ink-muted hover:text-brand hover:bg-white/60 border-transparent"
           }`}
           onClick={() => selected !== option.value && handleChange(option.value)}
         >

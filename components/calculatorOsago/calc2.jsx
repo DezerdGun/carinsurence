@@ -291,7 +291,7 @@ const Calc2 = () => {
 
       <div className="flex items-baseline justify-between pt-5">
         <a
-          className="flex items-baseline text-blue-700 cursor-pointer hover:underline hover:underline-offset-4"
+          className="flex items-baseline font-semibold cursor-pointer text-brand hover:underline hover:underline-offset-4"
           onClick={() => setStep(1)}
         >
           {"<"} Назад
@@ -300,7 +300,7 @@ const Calc2 = () => {
           variant="contained"
           color="primary"
           size="small"
-          className="block px-5 py-2 mt-8 ml-auto normal-case bg-blue-700"
+          className="block px-6 py-2 mt-8 ml-auto normal-case bg-brand"
         >
           Продолжить
         </Button>

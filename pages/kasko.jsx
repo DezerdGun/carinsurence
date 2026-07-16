@@ -1,36 +1,30 @@
+import Head from "next/head";
 import { Banner, AdvantagesIngos } from "@/components";
-import { LINKS } from "@/consts";
+import { LINKS, BRAND } from "@/consts";
+import { useLang } from "@/components/i18n/LangContext";
+
+const advImgs = ["/kasko-adv-osmotr.svg", "/kasko-adv-monthly.svg", "/kasko-adv-repair.svg"];
 
 const Kasko = () => {
-  const data = [
-    {
-      title: "Осмотр авто в приложении",
-      description: "Не придется ехать в офис — осмотр автомобиля можно провести самостоятельно в приложении IngoMobile",
-      img: "/kasko-adv-osmotr.svg",
-    },
-    {
-      title: "Оплата по частям",
-      description: "Необязательно сразу оплачивать всю стоимость полиса. Платеж можно разбить на 3 или 12 месяцев",
-      img: "/kasko-adv-monthly.svg",
-    },
-    {
-      title: "Направление на ремонт за 1 час",
-      description: "Заявите о происшествии в мобильном приложении и получите направление на ремонт за 1 рабочий час",
-      img: "/kasko-adv-repair.svg",
-    },
-  ];
+  const { t } = useLang();
+  const p = t.kaskoPage;
+  const data = p.adv.map((a, i) => ({ ...a, img: advImgs[i] }));
 
   return (
-    <main>
+    <>
+      <Head>
+        <title>{`${p.title} — ${BRAND.name}`}</title>
+      </Head>
       <Banner
-        title="Полис Каско"
-        description="Узнайте стоимость, оформите полис без визита в офис и получите кешбэк при оплате картой Ингосстрах Бонус"
+        title={p.title}
+        description={p.description}
         link={LINKS.KASKO_CALC}
-        linkTitle="Рассчитать"
+        linkTitle={p.cta}
         img="/kasko-key-visual.svg"
+        points={p.points}
       />
-      <AdvantagesIngos title="Преимущества полиса Каско в «Ингосстрахе»" data={data} />
-    </main>
+      <AdvantagesIngos title={p.advTitle} data={data} />
+    </>
   );
 };
 

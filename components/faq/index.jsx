@@ -1,82 +1,66 @@
 import { useState } from "react";
+import { useLang } from "../i18n/LangContext";
+import Reveal from "../ui/Reveal";
+import { ChevronDownIcon } from "../icons";
+
+const Answer = ({ item }) => (
+  <>
+    {item.intro && <p>{item.intro}</p>}
+    {item.list && (
+      <ul className="mt-2 space-y-1 list-disc list-inside">
+        {item.list.map((li) => (
+          <li key={li}>{li}</li>
+        ))}
+      </ul>
+    )}
+    {item.paras &&
+      item.paras.map((p, i) => (
+        <p key={i} className={i > 0 ? "mt-2" : ""}>
+          {p}
+        </p>
+      ))}
+  </>
+);
 
 const FAQ = () => {
-  const [checked, setChecked] = useState(null);
-  const data = [
-    {
-      title: "Какие документы нужны для оформления полиса?",
-      description: (
-        <>
-          <p>Для оформления полиса вам потребуются:</p>
-          <ul>
-            <li>паспорт страхователя (того, кто заключает договор)</li>
-            <li>паспорт транспортного средства (ПТС)</li>
-            <li>водительские права всех, кто будет управлять автомобилем</li>
-            <li>документы, подтверждающие стоимость транспортного средства</li>
-          </ul>
-        </>
-      ),
-    },
-    {
-      title: "От каких рисков можно застраховать автомобиль?",
-      description: (
-        <>
-          <p>Основные риски, которые можно включить в полис Каско: повреждения, гибель, угон автомобиля.</p>
-
-          <p>Еще есть дополнительных опции: Шины-Диски, Сигнализация, Техническая помощь на дороге и т.д.</p>
-
-          <p>
-            Полисы ОСАГО и Зеленая карта покрывают риски причинения ущерба имуществу, жизни и здоровью третьих лиц
-            (гражданская ответственность).
-          </p>
-        </>
-      ),
-    },
-    {
-      title: "Какие документы нужны для оформления полиса?",
-      description: (
-        <>
-          <p>Для оформления полиса вам потребуются:</p>
-          <ul>
-            <li>паспорт страхователя (того, кто заключает договор)</li>
-            <li>паспорт транспортного средства (ПТС)</li>
-            <li>водительские права всех, кто будет управлять автомобилем</li>
-            <li>документы, подтверждающие стоимость транспортного средства</li>
-          </ul>
-        </>
-      ),
-    },
-  ];
+  const { t } = useLang();
+  const [open, setOpen] = useState(0);
 
   return (
-    <section className="max-w-6xl px-5 py-10 mx-auto">
-      <div className="flex flex-col gap-5 p-5 bg-white border border-gray-200 rounded-2xl">
-        {data.map((item, index) => (
-          <div key={index} className="px-5 bg-gray-100 border border-gray-200 cursor-pointer rounded-3xl">
-            <div
-              className="flex items-center justify-between py-3"
-              onClick={() => setChecked(checked === index ? null : index)}
-            >
-              <div
-                className={`font-medium pr-5 transition-colors ${
-                  checked === index ? "text-blue-500" : "text-gray-500"
-                }`}
-              >
-                {item.title}
+    <section id="faq" className="container-c py-16 lg:py-20">
+      <Reveal className="max-w-2xl mx-auto text-center">
+        <span className="eyebrow">{t.faq.eyebrow}</span>
+        <h2 className="mt-3 text-3xl font-extrabold font-display sm:text-4xl text-ink">{t.faq.title}</h2>
+        <p className="mt-3 text-ink-muted">{t.faq.subtitle}</p>
+      </Reveal>
+
+      <div className="max-w-3xl mx-auto mt-10 space-y-3">
+        {t.faq.items.map((item, index) => {
+          const active = open === index;
+          return (
+            <Reveal key={item.q} delay={index * 80}>
+              <div className={`overflow-hidden transition-colors border rounded-2xl ${active ? "border-brand-200 bg-brand-50/40" : "border-line bg-white"}`}>
+                <button
+                  className="flex items-center justify-between w-full gap-4 px-5 py-4 text-left"
+                  onClick={() => setOpen(active ? null : index)}
+                  aria-expanded={active}
+                >
+                  <span className={`font-semibold ${active ? "text-brand-600" : "text-ink"}`}>{item.q}</span>
+                  <span className={`grid w-9 h-9 rounded-full place-items-center shrink-0 transition-all ${active ? "bg-brand text-white rotate-180" : "bg-surface text-ink-muted"}`}>
+                    <ChevronDownIcon className="w-5 h-5" />
+                  </span>
+                </button>
+                <div className={`grid transition-all duration-300 ${active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}>
+                  <div className="overflow-hidden">
+                    <div className="px-5 pb-5 text-sm leading-relaxed text-ink-muted">
+                      <Answer item={item} />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <span
-                className={`flex items-center justify-center w-10 h-10 p-3 bg-white rounded-full leading-[100%] transition-transform ${
-                  checked === index ? "rotate-[135deg]" : "rotate-0"
-                }`}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-                  <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                </svg>
-              </span>
-            </div>
-            <div className={checked === index ? "block pb-5" : "hidden"}>{item.description}</div>
-          </div>
-        ))}
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );

@@ -2,29 +2,182 @@
 @tailwind components;
 @tailwind utilities;
 
-// :root {
-//   --foreground-rgb: 0, 0, 0;
-//   --background-start-rgb: 214, 219, 220;
-//   --background-end-rgb: 255, 255, 255;
-// }
-
-// @media (prefers-color-scheme: dark) {
-//   :root {
-//     --foreground-rgb: 255, 255, 255;
-//     --background-start-rgb: 0, 0, 0;
-//     --background-end-rgb: 0, 0, 0;
-//   }
-// }
+:root {
+  --brand: #0e7be6;
+  --brand-deep: #0a5db0;
+  --ink: #1a2431;
+  --line: #e6ecf3;
+}
 
 * {
   @apply box-border;
 }
 
-body {
-  @apply bg-gray-100;
+html {
+  scroll-behavior: smooth;
 }
 
-// body {
-//   color: rgb(var(--foreground-rgb));
-//   background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
-// }
+body {
+  @apply bg-white text-ink font-sans antialiased;
+  font-feature-settings: "cv02", "cv03", "cv04";
+  // Защита от горизонтального «растягивания» (clip не ломает sticky, в отличие от hidden)
+  overflow-x: clip;
+}
+
+::selection {
+  background: rgba(14, 123, 230, 0.18);
+  color: var(--brand-deep);
+}
+
+/* Тонкий скроллбар в фирменных тонах */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #eef2f7;
+}
+::-webkit-scrollbar-thumb {
+  background: #c3d3e4;
+  border-radius: 8px;
+  border: 2px solid #eef2f7;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a9c1da;
+}
+
+@layer components {
+  .container-c {
+    @apply max-w-6xl mx-auto px-5;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 select-none;
+  }
+  .btn-primary {
+    @apply btn px-6 py-3 text-white bg-brand shadow-soft;
+    &:hover {
+      @apply bg-brand-600 shadow-lift;
+      transform: translateY(-2px);
+    }
+  }
+  .btn-ghost {
+    @apply btn px-6 py-3 text-brand bg-brand-50 border border-brand-100;
+    &:hover {
+      @apply bg-brand-100;
+      transform: translateY(-2px);
+    }
+  }
+  .btn-white {
+    @apply btn px-6 py-3 text-brand-600 bg-white shadow-soft;
+    &:hover {
+      @apply shadow-card;
+      transform: translateY(-2px);
+    }
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold;
+  }
+
+  .card-c {
+    @apply bg-white border border-line rounded-2xl shadow-soft transition-all duration-300;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-bold uppercase text-brand;
+    letter-spacing: 0.14em;
+  }
+}
+
+/* Меню доступности: контрастные режимы */
+html.a11y-grayscale {
+  filter: grayscale(100%);
+}
+html.a11y-high {
+  filter: grayscale(100%) invert(100%);
+}
+
+/* Плавающая SOS-кнопка: пульсация */
+@keyframes sos-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Scroll-reveal: начальное скрытое состояние + появление */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Бегущая лента партнёров */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Мягкое свечение/блик на кнопке */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.35),
+    transparent
+  );
+  transform: translateX(-120%);
+  animation: shine 3.5s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-120%);
+  }
+  60%,
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

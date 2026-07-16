@@ -1,38 +1,30 @@
+import Head from "next/head";
 import { Banner, AdvantagesIngos } from "@/components";
-import { LINKS } from "@/consts";
+import { LINKS, BRAND } from "@/consts";
+import { useLang } from "@/components/i18n/LangContext";
+
+const advImgs = ["/osago-i-order-online.svg", "/osago-i-support.svg", "/osago-i-incident-online.svg"];
 
 const Osago = () => {
-  const data = [
-    {
-      title: "Покупка полиса онлайн",
-      description:
-        "Не нужно ехать в офис страховой компании и сидеть в очереди. Полис можно купить онлайн не выходя из дома",
-      img: "/osago-i-order-online.svg",
-    },
-    {
-      title: "Поддержка 24/7",
-      description:
-        "Мы всегда на связи — можно позвонить по телефону, написать в онлайн-чате на сайте или в мессенджерах",
-      img: "/osago-i-support.svg",
-    },
-    {
-      title: "Заявление о происшествии онлайн",
-      description: "Сообщить о ДТП и отслеживать статус урегулирования можно в приложении IngoMobile",
-      img: "/osago-i-incident-online.svg",
-    },
-  ];
+  const { t } = useLang();
+  const p = t.osagoPage;
+  const data = p.adv.map((a, i) => ({ ...a, img: advImgs[i] }));
 
   return (
-    <main>
+    <>
+      <Head>
+        <title>{`${p.title} — ${BRAND.name}`}</title>
+      </Head>
       <Banner
-        title="Полис ОСАГО онлайн"
-        description=" Узнайте стоимость за несколько минут, оформите полис через интернет без осмотра авто. Получите кешбэк при оплате картой Ингосстрах Бонус"
+        title={p.title}
+        description={p.description}
         link={LINKS.OSAGO_CALC}
-        linkTitle="Рассчитать ОСАГО"
+        linkTitle={p.cta}
         img="/auto-osago__hero-banner-new-3.svg"
+        points={p.points}
       />
-      <AdvantagesIngos title="Преимущества полиса ОСАГО в «Ингосстрахе»" data={data} />
-    </main>
+      <AdvantagesIngos title={p.advTitle} data={data} />
+    </>
   );
 };
 
